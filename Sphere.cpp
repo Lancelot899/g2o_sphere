@@ -72,7 +72,7 @@ Sphere::Sphere()
 {
 }
 
-bool Sphere::optimize(BuildMethod buildMethod, int iter_) {
+bool Sphere::optimize(int iter_) {
     if(vertexes.empty() == true || edges.empty() == true)
         return false;
 

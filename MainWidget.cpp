@@ -156,7 +156,7 @@ void MainWidget::btnOptimize()
     QString Striter = IterSetEdit->text();
     if(Striter.size())
         iter = atoi(Striter.toAscii().data());
-    sphere->optimize(Sphere::OPT_G2O, iter);
+    sphere->optimize(iter);
     update();
     optButton->setDisabled(true);
 }

@@ -6,13 +6,12 @@
 
 
 int main(int argc, char *argv[]) {
-    QApplication app(argc, argv); //! 初始化一个qt的运行实例
+    QApplication app(argc, argv);
     google::InitGoogleLogging(argv[0]);
 
-    MainWidget w; //! 初始化一个窗口类
-    w.show(); //! 显示窗口
+    MainWidget w;
+    w.show();
 
-    return app.exec();   //! 这个是运行qt的消息循环
-
+    return app.exec();
 }
 
