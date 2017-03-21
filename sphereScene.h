@@ -27,8 +27,8 @@ public slots:
 
 
 protected:
-    virtual void draw();           //! 画球
-    virtual void init();           //！ 初始化窗口
+    virtual void draw();
+    virtual void init();
 
 private:
     std::shared_ptr<Sphere> sphere;

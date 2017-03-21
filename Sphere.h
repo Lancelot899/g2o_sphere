@@ -10,30 +10,24 @@
 class Sphere
 {
 public:
-    enum BuildMethod {     //! 优化方案选择
-        OPT_G2O,
-        OPT_CERES,
-        OPT_DEFAULT
-    };
-
     Sphere();
-    void pushVertex(Vertex &vertex) {       //! 加入顶点
+    void pushVertex(Vertex &vertex) {
         vertexes.push_back(vertex);
     }
 
-    void pushEdge(Edge &edge) {             //! 加入边
+    void pushEdge(Edge &edge) {
         edges.push_back(edge);
     }
 
-    const std::vector<Edge>& getEdges() {   //! 得到边数据
+    const std::vector<Edge>& getEdges() {
         return edges;
     }
 
-    const std::vector<Vertex>& getVertexes() { //! 得到顶点数据
+    const std::vector<Vertex>& getVertexes() {
         return vertexes;
     }
 
-    virtual bool optimize(BuildMethod buildMethod = OPT_DEFAULT, int iter = 50);   //! 优化
+    virtual bool optimize(int iter = 50);
 
 private:
     std::vector<Vertex> vertexes;

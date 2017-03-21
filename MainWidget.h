@@ -21,20 +21,20 @@ public:
 signals:
 
 public slots:
-    void btnInit();                //! 初始化按钮消息相应函数
-    void btnOptimize();            //! 优化按钮消息相应函数
+    void btnInit();
+    void btnOptimize();
 
 private:
-    SphereScene  *sphereScene;     //! 球的显示窗口
-    QLineEdit    *IterSetEdit;     //! 编辑窗
-    QPushButton  *InitButton;      //! 初始化按钮
-    QPushButton  *optButton;       //! 优化按钮
+    SphereScene  *sphereScene;
+    QLineEdit    *IterSetEdit;
+    QPushButton  *InitButton;
+    QPushButton  *optButton;
 
 private:
-    bool  isInit;                  //! 判断是否初始化
+    bool  isInit;
 
 private:
-    std::shared_ptr<Sphere>  sphere; //! 运算的实例
+    std::shared_ptr<Sphere>  sphere;
 };
 
 #endif // MAINWIDGET_H
