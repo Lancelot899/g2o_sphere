@@ -2,13 +2,11 @@
 #include <iostream>
 
 #include <Eigen/Sparse>
-#include <Eigen/IterativeLinearSolvers>
 
 
 #include <ceres/ceres.h>
 
 #include "Sphere.h"
-#include "DataStruct.h"
 
 class PoseGraphError : public ceres::SizedCostFunction<6, 6, 6> {
 public:
@@ -89,6 +87,41 @@ private:
 Sphere::Sphere()
 {
 }
+
+
+class CERES_EXPORT SE3Parameterization : public ceres::LocalParameterization {
+public:
+    virtual ~SE3Parameterization() {}
+    virtual bool Plus(const double* x,
+                      const double* delta,
+                      double* x_plus_delta) const;
+    virtual bool ComputeJacobian(const double* x,
+                                 double* jacobian) const;
+    virtual int GlobalSize() const { return 6; }
+    virtual int LocalSize() const { return 6; }
+};
+
+bool SE3Parameterization::ComputeJacobian(const double *x, double *jacobian) const {
+    ceres::MatrixRef(jacobian, 6, 6) = ceres::Matrix::Identity(6, 6);
+    return true;
+}
+
+bool SE3Parameterization::Plus(const double* x,
+                               const double* delta,
+                               double* x_plus_delta) const {
+    Eigen::Map<const Eigen::Matrix<double, 6, 1>> lie(x);
+    Eigen::Map<const Eigen::Matrix<double, 6, 1>> delta_lie(delta);
+
+    Sophus::SE3d T = Sophus::SE3d::exp(lie);
+    Sophus::SE3d delta_T = Sophus::SE3d::exp(delta_lie);
+    Eigen::Matrix<double, 6, 1> x_plus_delta_lie = (T * delta_T).log();
+
+    for(int i = 0; i < 6; ++i) x_plus_delta[i] = x_plus_delta_lie(i, 0);
+
+    return true;
+
+}
+
 
 bool Sphere::optimize(int iter_) {
     if(vertexes.empty() == true || edges.empty() == true)
