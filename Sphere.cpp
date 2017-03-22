@@ -137,9 +137,12 @@ bool Sphere::optimize(int iter_) {
         ceres::CostFunction* costFun = new PoseGraphError(i, edges[i].pose, edges[i].infomation);
         problem.AddResidualBlock(costFun, new ceres::HuberLoss(1.5), vertexes[edges[i].i].pose.data(),
                                  vertexes[edges[i].j].pose.data());
-        problem.SetParameterization(vertexes[edges[i].i].pose.data(), new SE3Parameterization());
-        problem.SetParameterization(vertexes[edges[i].j].pose.data(), new SE3Parameterization());
     }
+
+    for(size_t i = 0; i < vertexes.size(); ++i) {
+        problem.SetParameterization(vertexes[i].pose.data(), new SE3Parameterization());
+    }
+
 
     //printf("optimization start!\n");
 
