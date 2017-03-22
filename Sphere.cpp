@@ -13,8 +13,8 @@ public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     PoseGraphError(int i, Sophus::SE3d &T_ij, Eigen::Matrix<double, 6, 6> &information) {
         T_ij_ = T_ij;
-        Eigen::HouseholderQR<Eigen::Matrix<double, 6, 6>> qr(information);
-        sqrt_information_ = qr.matrixQR().triangularView<Eigen::Upper>();
+        Eigen::LLT<Eigen::Matrix<double, 6, 6>> llt(information);
+        sqrt_information_ = llt.matrixL();
         id = i;
     }
 
