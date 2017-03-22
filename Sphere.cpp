@@ -119,7 +119,7 @@ bool SE3Parameterization::Plus(const double* x,
 
     Sophus::SE3d T = Sophus::SE3d::exp(lie);
     Sophus::SE3d delta_T = Sophus::SE3d::exp(delta_lie);
-    Eigen::Matrix<double, 6, 1> x_plus_delta_lie = (T * delta_T).log();
+    Eigen::Matrix<double, 6, 1> x_plus_delta_lie = (delta_T * T).log();
 
     for(int i = 0; i < 6; ++i) x_plus_delta[i] = x_plus_delta_lie(i, 0);
 
