@@ -60,15 +60,20 @@ public:
         adj.block<3, 3>(0, 3) = Sophus::SO3d::hat(Tij_estimate.translation()) * R;
         adj.block<3, 3>(3, 0) = Eigen::Matrix<double, 3, 3>::Zero(3, 3);
 
-        Jac_j.noalias() = Jac_i * adj;
+       // printf("compute adj ok!\n");
 
+        Jac_j = -Jac_i * adj;
         int k = 0;
         for(int i = 0; i < 6; i++) {
             residuals[i] = err_(i);
-            for (int j = 0; j < 6; ++j) {
-                jacobians[0][k] = Jac_i(i, j);
-                jacobians[1][k] = Jac_j(i, j);
-                k++;
+            if(jacobians) {
+                for (int j = 0; j < 6; ++j) {
+                    if (jacobians[0])
+                        jacobians[0][k] = Jac_i(i, j);
+                    if (jacobians[1])
+                        jacobians[1][k] = Jac_j(i, j);
+                    k++;
+                }
             }
         }
 
@@ -132,6 +137,8 @@ bool Sphere::optimize(int iter_) {
         ceres::CostFunction* costFun = new PoseGraphError(i, edges[i].pose, edges[i].infomation);
         problem.AddResidualBlock(costFun, new ceres::HuberLoss(1.5), vertexes[edges[i].i].pose.data(),
                                  vertexes[edges[i].j].pose.data());
+        problem.SetParameterization(vertexes[edges[i].i].pose.data(), new SE3Parameterization());
+        problem.SetParameterization(vertexes[edges[i].j].pose.data(), new SE3Parameterization());
     }
 
     //printf("optimization start!\n");
