@@ -147,8 +147,11 @@ bool Sphere::optimize(int iter_) {
     //printf("optimization start!\n");
 
     ceres::Solver::Options options;
+    options.dynamic_sparsity = true;
+    options.max_num_iterations = iter_;
+    options.sparse_linear_algebra_library_type = ceres::SUITE_SPARSE;
     options.minimizer_type = ceres::TRUST_REGION;
-    options.linear_solver_type = ceres::SPARSE_SCHUR;
+    options.linear_solver_type = ceres::SPARSE_NORMAL_CHOLESKY;
     options.trust_region_strategy_type = ceres::DOGLEG;
     options.minimizer_progress_to_stdout = true;
     options.dogleg_type = ceres::SUBSPACE_DOGLEG;
